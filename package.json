@@ -1,0 +1,10 @@
+{
+  "name": "myfirstapp",
+  "version": "1.0.0",
+  "description": "My first application",
+  "repository": {
+    "type": "git",
+    "url": "?.git"
+  },
+  "author": "SeveR"
+}
