@@ -1,0 +1,14 @@
+{
+  "name": "myfirstapp",
+  "version": "1.0.0",
+  "description": "My first application",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/severjason/gulpTest.git"
+  },
+  "author": "SeveR",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-util": "^3.0.7"
+  }
+}
