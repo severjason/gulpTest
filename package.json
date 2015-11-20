@@ -4,6 +4,7 @@
   "description": "My first application",
   "repository": {
     "type": "git",
+<<<<<<< HEAD
     "url": "https://github.com/severjason/gulpTest.git"
   },
   "author": "SeveR",
@@ -11,4 +12,9 @@
     "gulp": "^3.9.0",
     "gulp-util": "^3.0.7"
   }
+=======
+    "url": "?.git"
+  },
+  "author": "SeveR"
+>>>>>>> 722ae7c22ad5cc8f894a710f58662c9ca7538a2d
 }

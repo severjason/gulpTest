@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // style.scss
 // ==============
 
@@ -14,4 +15,22 @@
 
 // JS partials
 @import "pixgrid";
+=======
+// style.scss
+// ==============
+
+//Compass imports
+@import "compass";
+@import "compass/reset";
+@import "compass/css3/box-shadow";
+
+//Core partials
+@import "variables";
+@import "mixins";
+@import "base";
+@import "modules";
+
+// JS partials
+@import "pixgrid";
+>>>>>>> 722ae7c22ad5cc8f894a710f58662c9ca7538a2d
 @import "rclick";
