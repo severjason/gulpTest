@@ -8,7 +8,7 @@
   },
   "author": "SeveR",
   "devDependencies": {
-    "gulp": "^3.9.0",
-    "gulp-util": "^3.0.7"
+    "gulp": "~3.9.0",
+    "gulp-util": "~3.0.7"
   }
 }
