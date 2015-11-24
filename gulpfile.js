@@ -3,8 +3,10 @@
  */
 var gulp = require('gulp'),
     gutil = require('gulp-util'),
+    cleanDest = require('gulp-clean-dest'),
     concat = require('gulp-concat'),
     browserify = require('gulp-browserify'),
+    compass = require('gulp-compass'),
     coffee = require('gulp-coffee');
 
 var sources = {
@@ -14,7 +16,8 @@ var sources = {
         'components/scripts/pixgrid.js',
         'components/scripts/tagline.js',
         'components/scripts/template.js'
-    ]
+    ],
+    sass:['components/sass/style.scss']
 };
 
 gulp.task('coffee', function() {
@@ -25,8 +28,21 @@ gulp.task('coffee', function() {
 });
 gulp.task('js', function() {
     gulp.src(sources.js)
-        .pipe(concat('script.js')
-            .on('error', gutil.log))
-        .pipe(browserify())
+        .pipe(concat('script.js'))
+        .pipe(browserify()
+            .on('error',gutil.log))
         .pipe(gulp.dest('builds/development/js'))
+});
+
+gulp.task('compass1', function() {
+    gulp.src(sources.sass)
+        .pipe(compass({
+            sass:'components/sass',
+            image:'builds/development/images',
+            style:'expanded',
+            comments: true
+        })
+            .on('error',gutil.log))
+        .pipe(gulp.dest('builds/development/css'))
+        .pipe(cleanDest('css'))
 });
