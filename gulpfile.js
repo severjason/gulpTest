@@ -17,7 +17,8 @@ var sources = {
         'components/scripts/tagline.js',
         'components/scripts/template.js'
     ],
-    sass:['components/sass/style.scss']
+    sass:['components/sass/style.scss'],
+    sassPartials:['components/sass/*.scss']
 };
 
 gulp.task('coffee', function() {
@@ -34,7 +35,7 @@ gulp.task('js', function() {
         .pipe(gulp.dest('builds/development/js'))
 });
 
-gulp.task('compass1', function() {
+gulp.task('compass', function() {
     gulp.src(sources.sass)
         .pipe(compass({
             sass:'components/sass',
@@ -46,3 +47,11 @@ gulp.task('compass1', function() {
         .pipe(gulp.dest('builds/development/css'))
         .pipe(cleanDest('css'))
 });
+
+gulp.task('watch', function(){
+    gulp.watch(sources.coffee,['coffee']);
+    gulp.watch(sources.js,['js']);
+    gulp.watch(sources.sassPartials,['compass']);
+});
+
+gulp.task('default',['coffee','js','compass']);
