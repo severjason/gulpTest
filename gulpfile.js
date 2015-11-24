@@ -4,6 +4,7 @@
 var gulp = require('gulp'),
     gutil = require('gulp-util'),
     concat = require('gulp-concat'),
+    browserify = require('gulp-browserify'),
     coffee = require('gulp-coffee');
 
 var sources = {
@@ -26,5 +27,6 @@ gulp.task('js', function() {
     gulp.src(sources.js)
         .pipe(concat('script.js')
             .on('error', gutil.log))
+        .pipe(browserify())
         .pipe(gulp.dest('builds/development/js'))
 });
