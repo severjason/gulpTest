@@ -6,6 +6,7 @@ var gulp = require('gulp'),
     cleanDest = require('gulp-clean-dest'),
     concat = require('gulp-concat'),
     browserify = require('gulp-browserify'),
+    rubySass = require('gulp-ruby-sass'),
     compass = require('gulp-compass'),
     coffee = require('gulp-coffee');
 
@@ -42,8 +43,12 @@ gulp.task('compass', function() {
             image:'builds/development/images',
             style:'expanded',
             comments: true
-        })
-            .on('error',gutil.log))
+        }))
+        .on('error', function(error) {
+        // Would like to catch the error here
+        console.log(error);
+        this.emit('end');
+    })
         .pipe(gulp.dest('builds/development/css'))
         .pipe(cleanDest('css'))
 });
