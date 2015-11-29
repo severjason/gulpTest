@@ -1,27 +1,30 @@
 /**
  * Created by severjason on 18.11.2015.
  */
-var gulp = require('gulp'),
-    gutil = require('gulp-util'),
-    cleanDest = require('gulp-clean-dest'),
-    concat = require('gulp-concat'),
-    browserify = require('gulp-browserify'),
-    connect = require('gulp-connect'),
-    compass = require('gulp-compass'),
-    gulpif = require('gulp-if'),
-    minifyHTML = require('gulp-minify-html'),
-    jsonminify = require('gulp-jsonminify'),
-    uglify = require('gulp-uglify');
+const   gulp = require('gulp'),
+        gutil = require('gulp-util'),
+        cleanDest = require('gulp-clean-dest'),
+        concat = require('gulp-concat'),
+        browserify = require('gulp-browserify'),
+        connect = require('gulp-connect'),
+        compass = require('gulp-compass'),
+        gulpif = require('gulp-if'),
+        minifyHTML = require('gulp-minify-html'),
+        jsonminify = require('gulp-jsonminify'),
+        uglify = require('gulp-uglify'),
+        imagemin = require('gulp-imagemin'),
+        pngquant = require('imagemin-pngquant'),
+        coffee = require('gulp-coffee');
 
-    coffee = require('gulp-coffee');
-
-var env,
-    sources,
-    outputDir,
-    sassStyle;
+var     env,
+        sources,
+        outputDir,
+        sassStyle;
 
 
-env = process.env.NODE_ENV || 'development';
+//env = process.env.NODE_ENV || 'development';
+env = 'production';
+//env = 'development';
 
 if (env === 'development') {
     outputDir = 'builds/development/';
@@ -43,7 +46,8 @@ sources = {
     sass: ['components/sass/style.scss'],
     sassPartials: ['components/sass/*.scss'],
     htmlDev: ['builds/development/*.html'],
-    jsonDev: ['builds/development/js/*.json']
+    jsonDev: ['builds/development/js/*.json'],
+    imagesDev: ['builds/development/images/**/*.*']
 };
 
 gulp.task('coffee', function () {
@@ -101,11 +105,21 @@ gulp.task('html', function(){
        .pipe(gulpif(env === 'production', gulp.dest(outputDir)))
        .pipe(connect.reload())
 });
+gulp.task('images', function() {
+    gulp.src(sources.imagesDev)
+        .pipe(gulpif(env === 'production', imagemin({
+            progressive: true,
+            svgoPlugins: [{ removeViewBox: false }],
+            use: [pngquant()]
+        })))
+        .pipe(gulpif(env === 'production', gulp.dest(outputDir + 'images')))
+        .pipe(connect.reload())
+});
 gulp.task('json', function(){
     gulp.src(sources.jsonDev)
         .pipe(gulpif(env === 'production', jsonminify()))
-        .pipe(gulpif(env === 'production', gulp.dest(outputDir)))
+        .pipe(gulpif(env === 'production', gulp.dest(outputDir + 'js')))
         .pipe(connect.reload())
 });
 
-gulp.task('default', ['html','json', 'coffee', 'js', 'compass', 'connect', 'watch']);
+gulp.task('default', ['html','json', 'coffee', 'js', 'compass','images', 'connect', 'watch']);
