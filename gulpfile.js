@@ -8,6 +8,8 @@ var gulp = require('gulp'),
     browserify = require('gulp-browserify'),
     connect = require('gulp-connect'),
     compass = require('gulp-compass'),
+    gulpif = require('gulp-if');
+    uglify = require('gulp-uglify');
     coffee = require('gulp-coffee');
 
 var env,
@@ -52,6 +54,7 @@ gulp.task('js', function () {
         .pipe(concat('script.js'))
         .pipe(browserify()
             .on('error', gutil.log))
+        .pipe(gulpif(env === 'production',uglify()))
         .pipe(gulp.dest(outputDir + 'js'))
         .pipe(connect.reload())
 });
