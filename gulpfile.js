@@ -10,6 +10,7 @@ var gulp = require('gulp'),
     compass = require('gulp-compass'),
     gulpif = require('gulp-if'),
     minifyHTML = require('gulp-minify-html'),
+    jsonminify = require('gulp-jsonminify'),
     uglify = require('gulp-uglify');
 
     coffee = require('gulp-coffee');
@@ -42,7 +43,7 @@ sources = {
     sass: ['components/sass/style.scss'],
     sassPartials: ['components/sass/*.scss'],
     htmlDev: ['builds/development/*.html'],
-    json: [outputDir + 'js/*.json']
+    jsonDev: ['builds/development/js/*.json']
 };
 
 gulp.task('coffee', function () {
@@ -84,7 +85,7 @@ gulp.task('watch', function () {
     gulp.watch(sources.js, ['js']);
     gulp.watch(sources.sassPartials, ['compass']);
     gulp.watch(sources.htmlDev,['html']);
-    gulp.watch(sources.json,['json']);
+    gulp.watch(sources.jsonDev,['json']);
 });
 gulp.task('connect', function () {
     connect.server({
@@ -101,7 +102,9 @@ gulp.task('html', function(){
        .pipe(connect.reload())
 });
 gulp.task('json', function(){
-    gulp.src(sources.json)
+    gulp.src(sources.jsonDev)
+        .pipe(gulpif(env === 'production', jsonminify()))
+        .pipe(gulpif(env === 'production', gulp.dest(outputDir)))
         .pipe(connect.reload())
 });
 
