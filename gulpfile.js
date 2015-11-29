@@ -8,8 +8,10 @@ var gulp = require('gulp'),
     browserify = require('gulp-browserify'),
     connect = require('gulp-connect'),
     compass = require('gulp-compass'),
-    gulpif = require('gulp-if');
+    gulpif = require('gulp-if'),
+    minifyHTML = require('gulp-minify-html'),
     uglify = require('gulp-uglify');
+
     coffee = require('gulp-coffee');
 
 var env,
@@ -39,7 +41,7 @@ sources = {
     ],
     sass: ['components/sass/style.scss'],
     sassPartials: ['components/sass/*.scss'],
-    html: [outputDir + '*.html'],
+    htmlDev: ['builds/development/*.html'],
     json: [outputDir + 'js/*.json']
 };
 
@@ -81,7 +83,7 @@ gulp.task('watch', function () {
     gulp.watch(sources.coffee, ['coffee']);
     gulp.watch(sources.js, ['js']);
     gulp.watch(sources.sassPartials, ['compass']);
-    gulp.watch(sources.html,['html']);
+    gulp.watch(sources.htmlDev,['html']);
     gulp.watch(sources.json,['json']);
 });
 gulp.task('connect', function () {
@@ -93,7 +95,9 @@ gulp.task('connect', function () {
 
 });
 gulp.task('html', function(){
-   gulp.src(sources.html)
+   gulp.src(sources.htmlDev)
+       .pipe(gulpif(env === 'production', minifyHTML()))
+       .pipe(gulpif(env === 'production', gulp.dest(outputDir)))
        .pipe(connect.reload())
 });
 gulp.task('json', function(){
