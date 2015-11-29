@@ -10,7 +10,24 @@ var gulp = require('gulp'),
     compass = require('gulp-compass'),
     coffee = require('gulp-coffee');
 
-var sources = {
+var env,
+    sources,
+    outputDir,
+    sassStyle;
+
+
+env = process.env.NODE_ENV || 'development';
+
+if (env === 'development') {
+    outputDir = 'builds/development/';
+    sassStyle = 'expanded';
+}
+else {
+    outputDir = 'builds/production/';
+    sassStyle = 'compressed';
+}
+
+sources = {
     coffee: ['components/coffee/tagline.coffee'],
     js: [
         'components/scripts/rclick.js',
@@ -20,9 +37,8 @@ var sources = {
     ],
     sass: ['components/sass/style.scss'],
     sassPartials: ['components/sass/*.scss'],
-    development: ['builds/development'],
-    html: ['builds/development/*.html'],
-    json: ['builds/development/js/*.json']
+    html: [outputDir + '*.html'],
+    json: [outputDir + 'js/*.json']
 };
 
 gulp.task('coffee', function () {
@@ -36,7 +52,7 @@ gulp.task('js', function () {
         .pipe(concat('script.js'))
         .pipe(browserify()
             .on('error', gutil.log))
-        .pipe(gulp.dest('builds/development/js'))
+        .pipe(gulp.dest(outputDir + 'js'))
         .pipe(connect.reload())
 });
 
@@ -44,8 +60,8 @@ gulp.task('compass', function () {
     gulp.src(sources.sass)
         .pipe(compass({
             sass: 'components/sass',
-            image: 'builds/development/images',
-            style: 'expanded',
+            image: outputDir + 'images',
+            style: sassStyle,
             comments: true
         }))
         .on('error', function (error) {
@@ -53,7 +69,7 @@ gulp.task('compass', function () {
             console.log(error);
             this.emit('end');
         })
-        .pipe(gulp.dest('builds/development/css'))
+        .pipe(gulp.dest(outputDir + 'css'))
         .pipe(cleanDest('css'))
         .pipe(connect.reload())
 });
@@ -68,7 +84,7 @@ gulp.task('watch', function () {
 gulp.task('connect', function () {
     connect.server({
         port: 8888,
-        root: sources.development,
+        root: outputDir,
         livereload: true
     })
 
