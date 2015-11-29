@@ -20,7 +20,9 @@ var sources = {
     ],
     sass: ['components/sass/style.scss'],
     sassPartials: ['components/sass/*.scss'],
-    development: ['builds/development']
+    development: ['builds/development'],
+    html: ['builds/development/*.html'],
+    json: ['builds/development/js/*.json']
 };
 
 gulp.task('coffee', function () {
@@ -60,6 +62,8 @@ gulp.task('watch', function () {
     gulp.watch(sources.coffee, ['coffee']);
     gulp.watch(sources.js, ['js']);
     gulp.watch(sources.sassPartials, ['compass']);
+    gulp.watch(sources.html,['html']);
+    gulp.watch(sources.json,['json']);
 });
 gulp.task('connect', function () {
     connect.server({
@@ -69,5 +73,13 @@ gulp.task('connect', function () {
     })
 
 });
+gulp.task('html', function(){
+   gulp.src(sources.html)
+       .pipe(connect.reload())
+});
+gulp.task('json', function(){
+    gulp.src(sources.json)
+        .pipe(connect.reload())
+});
 
-gulp.task('default', ['coffee', 'js', 'compass', 'connect', 'watch']);
+gulp.task('default', ['html','json', 'coffee', 'js', 'compass', 'connect', 'watch']);
